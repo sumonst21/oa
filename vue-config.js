@@ -1,3 +1,3 @@
 module.exports = {
-    publicPath: '/oa-pages'
+    publicPath: '/oa'
   }
