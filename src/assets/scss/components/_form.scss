@@ -1,0 +1,248 @@
+
+// -----------------------------------------------------------------------------
+//! Book
+// -----------------------------------------------------------------------------
+
+form {
+    background: $lightgray;
+    padding: 2rem 1rem 3rem;
+    margin: -1rem -1rem 0 !important;
+    flex: 0 0 auto;
+    background-image: linear-gradient(to left, #334b70, #3c557b, #445f86, #4d6991, #56739c);
+    color: #fff;
+
+    input[type=text] {
+        border: 0;
+    }
+
+    @include min( 640px ) {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .button-wrap {
+        flex: 1 0 100%;
+    }
+
+    label {
+        font-family: $oxygen;
+        font-weight: 800;
+        font-size: 13px;
+        text-align: left;
+    }
+}
+
+.book {
+    max-width: 304px;
+    flex: 1 1 auto;
+    text-align: center;
+    margin: 0 auto;
+
+    + .book {
+        margin-top: 2.5rem;
+    }
+
+    @include min( 640px ) {
+        max-width: 355px;
+        margin: 0;
+        padding: 0 2rem;
+
+        + .book {
+            margin-top: 0;
+        }
+    }
+}
+
+
+// -----------------------------------------------------------------------------
+//! Label input
+// -----------------------------------------------------------------------------
+
+form h2 {
+    margin-bottom: 10px;
+    padding: 5px 10px;
+    height: 43px;
+}
+
+.label-input {
+    display: block;
+    height: 43px;
+    width: 100%;
+    margin: 0 0 10px;
+    padding: 5px 10px;
+    background: rgba(#fff, .1);
+    text-align: center;
+    font-size: 1.5em;
+    color: #fff;
+    border: 0;
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    font-weight: 700;
+
+    @include min( 640px ) {
+        max-width: none;
+    }
+
+    &:focus {
+        outline: 0;
+        border: 0;
+    }
+}
+
+// -----------------------------------------------------------------------------
+//! Button
+// -----------------------------------------------------------------------------
+
+
+form .btn {
+    margin-top: 3rem;
+    background: $teal;
+    color: #fff;
+    background: rgba(#b9bfcd,.5);
+
+    &:hover {
+        background: $teal;
+    }
+
+    &:hover {
+        opacity: .9;
+    }
+}
+
+
+// -----------------------------------------------------------------------------
+//! Input
+// -----------------------------------------------------------------------------
+
+
+.field-wrap {
+    input[type=text],
+    input[type=number] {
+        border: 1px solid transparent;
+        border-radius: 2px;
+        -webkit-appearance: none;
+        appearance: none;
+        font-size: 16px;
+        text-align: center;
+        width: 80px;
+        height: 35px;
+        font-family: Avenir, Helvetica, Arial, sans-serif;
+
+
+        &:focus {
+            outline: 0;
+            border-color: $teal;
+        }
+    }
+}
+
+.field {
+    label {
+        display: block;
+        margin-bottom: 4px;
+    }
+
+    + .field {
+        margin-left: 30px;
+    }
+}
+
+
+// -----------------------------------------------------------------------------
+//! Open parser
+// -----------------------------------------------------------------------------
+
+.btn-util {
+    width: 64px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    outline: 0;
+    border: 0;
+    cursor: pointer;
+    transition: 0s;
+
+    &:hover {
+        background: rgba(#fff, .3);
+    }
+
+    svg {
+        fill: #fff;
+        width: 28px;
+        height: auto;
+    }
+}
+
+.open-parser {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    svg {
+        width: 28px;
+    }
+}
+
+// -----------------------------------------------------------------------------
+//! Bookmarks
+// -----------------------------------------------------------------------------
+
+.bookmarks {
+    position: fixed;
+    top: 0;
+    right: 0;
+    box-shadow: rgba(0, 0, 0, .16) 0px 2px 8px 0px;
+}
+
+.bookmark {
+    position: relative;
+    background: #fff;
+    cursor: pointer;
+    font-size: 14px;
+    border-top: 1px solid rgba($darkblue, .3);
+
+    &:hover:before {
+        content: "";
+        pointer-events: none;
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        bottom: 0;
+        background: rgba($teal, .1);
+    }
+
+    .games {
+        background: $lightgray;
+        padding: 10px;
+        text-align: right;
+        flex: 1 1 auto;
+        font-size: 12px;
+
+        strong {
+            margin-left: 4px;
+        }
+    }
+
+    .ev {
+        padding: 10px;
+        font-weight: 600;
+        color: $green;
+    }
+}
+
+.save-play {
+    position: absolute;
+    top: 64px;
+    left: 0;
+
+    &.viewing-bookmark svg {
+        fill: $teal;
+    }
+
+    svg {
+        width: 16px;
+    }
+}
