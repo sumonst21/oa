@@ -133,7 +133,7 @@ export default {
         },
         maxedStakeA() {
             return this.plays.filter(obj => {
-                return obj.stakeA === 25;
+                return obj.stakeA === Number(this.maxA);
             });
         },
         balanced() {
