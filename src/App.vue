@@ -1,5 +1,6 @@
 <template>
     <div id="app">
+        <div class="copy-confirmation">copied to clipboard</div>
         <div v-if="bookmarks" class="bookmarks">
             <div v-for="(play, i) in bookmarks" class="bookmark flex-stretch" :key="i" @click="loadBookmark(play)">
                 <div class="ev flex-center">${{ play.ev }}</div>

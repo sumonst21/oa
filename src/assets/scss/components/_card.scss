@@ -60,6 +60,8 @@
 // -----------------------------------------------------------------------------
 
 .card {
+    position: relative;
+
     .amount {
         text-align: center;
     }
@@ -105,6 +107,7 @@
     }
 }
 
+
 // -----------------------------------------------------------------------------
 //! Transition
 // -----------------------------------------------------------------------------
@@ -148,4 +151,59 @@
     .amount:last-child {
         text-align: right !important;
     }
+}
+
+// -----------------------------------------------------------------------------
+//! Copy to clipboard
+// -----------------------------------------------------------------------------
+
+.copy-to-clipboard {
+    position: absolute;
+    top: 5px;
+    right: 6px;
+    background: transparent;
+    border: 0;
+    padding: 8px;
+    cursor: pointer;
+    color: rgba($black, .7);
+    transition: 0;
+    opacity: 0;
+
+    &:hover {
+        color: $teal;
+    }
+
+    svg {
+        width: 15px;
+        color: inherit;
+    }
+}
+
+.card:hover .copy-to-clipboard {
+    opacity: 1;
+}
+
+.copy-string {
+    opacity: 0;
+    pointer-events: none;
+    position: absolute;
+}
+
+.copy-confirmation {
+    position: fixed;
+    background: rgba( $teal, .8);
+    padding: 5px 14px;
+    color: #fff;
+    top: 40%;
+    border-radius: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    transition: opacity .2s;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 100;
+}
+
+.show-copy-confirmation .copy-confirmation {
+    opacity: .7;
 }

@@ -1,4 +1,14 @@
 const helpers = {
+    computed: {
+        sheetString() {
+            const today = new Date();
+            const dateArray = today.toLocaleDateString('en-US').split('/');
+            dateArray.pop();
+            const date = dateArray.join('/');
+
+            return `'',${date},${this.$parent.labelA},${this.$parent.oddsAx},${this.play.stakeA},,${this.$parent.labelB},${this.$parent.oddsBx},${this.play.stakeB}`;
+        },
+    },
     methods: {
         getPayout(odds, stake) {
             var payout = 0;
@@ -18,6 +28,17 @@ const helpers = {
             }
 
             return one + two;
+        },
+        copyToClipboard(inputID) {
+            const copyText = document.getElementById(inputID);
+            copyText.select();
+            copyText.setSelectionRange(0, 99999);
+            document.execCommand('copy');
+            document.querySelector('body').classList.add('show-copy-confirmation');
+
+            setTimeout(() => {
+                document.querySelector('body').classList.remove('show-copy-confirmation');
+            }, 700)
         },
     }
 };
