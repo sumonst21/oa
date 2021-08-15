@@ -130,11 +130,16 @@ export default {
                 return a.proximity - b.proximity;
             });
         },
+        maxedStakeA() {
+            return this.plays.filter(obj => {
+                return obj.stakeA === 25;
+            });
+        },
         balanced() {
             if ( !this.plays.length ) return false;
 
-            return this.lowProximity.slice(0,150).reduce((prev, current) => {
-                return (prev.ev > current.ev) ? prev : current;
+            return this.maxedStakeA.reduce((prev, current) => {
+                return (prev.proximity < current.proximity) ? prev : current;
             });
         },
         highestA() {
