@@ -5,6 +5,15 @@
             <div class="col text-center">
                 <h4>Book A data</h4>
                 <textarea v-model="rawDataDK" resize="none"></textarea>
+                <!-- <pre class="placeholder">
+                [
+                    {
+                                        "team": "team a",
+                                                "odds": ["215", "-250"],
+                                        "opp": "team b"
+                    },
+                ]
+                </pre> -->
             </div>
             <div class="col text-center">
                 <h4>Book B data</h4>
@@ -46,6 +55,7 @@ export default {
             league: 'mlb',
             dataDK: [],
             dataFD: [],
+            placeholderText: "test",
         }
     },
     mounted() {
