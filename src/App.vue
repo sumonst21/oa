@@ -44,7 +44,7 @@
                 </div>
             </div>
             <div class="flex-center button-wrap">
-                <button class="btn" type="submit" name="button">Find arbitrage</button>
+                <button class="btn" type="submit" name="button">Calculate arbitrage</button>
             </div>
         </form>
 
