@@ -135,9 +135,17 @@
 // -----------------------------------------------------------------------------
 
 .color-green {
-    color: $green;
+    color: $green !important;
 }
 
 .color-orange {
-    color: $orange;
+    color: $orange !important;
+}
+
+.color-red {
+	color: $red !important;
+}
+
+.color-blue {
+	color: $blue !important;
 }

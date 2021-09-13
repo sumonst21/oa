@@ -10,6 +10,7 @@ form {
     flex: 0 0 auto;
     background-image: linear-gradient(to left, #334b70, #3c557b, #445f86, #4d6991, #56739c);
     color: #fff;
+    position: relative;
 
     input[type=text] {
         border: 0;
@@ -152,6 +153,13 @@ form .btn {
 //! Open parser
 // -----------------------------------------------------------------------------
 
+.util-wrap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 5;
+}
+
 .btn-util {
     width: 64px;
     height: 64px;
@@ -176,14 +184,11 @@ form .btn {
 }
 
 .open-parser {
-    position: absolute;
-    top: 0;
-    left: 0;
-
     svg {
         width: 28px;
     }
 }
+
 
 // -----------------------------------------------------------------------------
 //! Bookmarks
@@ -194,6 +199,7 @@ form .btn {
     top: 0;
     right: 0;
     box-shadow: rgba(0, 0, 0, .16) 0px 2px 8px 0px;
+    z-index: 5;
 }
 
 .bookmark {
@@ -231,12 +237,14 @@ form .btn {
         font-weight: 600;
         color: $green;
     }
+    
+    &.conversion .games {
+        color: $purple;
+        font-weight: bold;
+    }
 }
 
 .save-play {
-    position: absolute;
-    top: 64px;
-    left: 0;
 
     &.viewing-bookmark svg {
         fill: $teal;
@@ -246,3 +254,14 @@ form .btn {
         width: 16px;
     }
 }
+
+// -----------------------------------------------------------------------------
+//! Toggle mode
+// -----------------------------------------------------------------------------
+
+.toggle.toggle-mode {
+    position: absolute;
+    left: 40px;
+    bottom: 10px;
+}
+

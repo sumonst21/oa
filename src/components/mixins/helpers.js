@@ -10,13 +10,28 @@ const helpers = {
         },
     },
     methods: {
+        getConversionColor(percent) {
+            if ( percent < 60 ) {
+                return 'color-red';
+            } else if ( percent < 70 ) {
+                return 'color-orange';
+            } else if ( percent < 80 ) {
+                return 'color-blue';
+            } else {
+                return 'color-green';
+            }
+        },
+        percentOf(orig, final) {
+          const percent = (final / orig) * 100;
+          return percent.toFixed(2);
+        },
         getPayout(odds, stake) {
             var payout = 0;
 
             payout = odds > 0
             ? (stake * (odds / 100) ) + stake
             : (stake / ((odds * -1) / 100 ) ) + stake;
-
+            
             return Number(payout).toFixed(2);
         },
         getDelta(one, two) {
