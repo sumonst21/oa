@@ -10,6 +10,12 @@ const helpers = {
         },
     },
     methods: {
+        onKeyUp() {
+            this.freshInput = true;
+            this.stakeA = this.stakeA.replace(/[^\d]/, '');
+            this.oddsA = this.oddsA.replace(/[^+-\d]/, '');
+            this.oddsB = this.oddsB.replace(/[^+-\d]/, '');
+        },
         getConversionColor(percent) {
             if ( percent < 60 ) {
                 return 'color-red';

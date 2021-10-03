@@ -44,7 +44,7 @@
 }
 
 .card-wrap {
-    padding: 2em 0;
+    padding: 2rem 1rem;
 
     @include min( $md ) {
         display: flex;
