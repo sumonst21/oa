@@ -70,6 +70,15 @@
         font-size: 27px;
         font-weight: 600;
         line-height: 1;
+        
+        &.small {
+            font-size: 18px;
+            line-height: .8;
+            
+            + small {
+                font-size: 11px;
+            }
+        }
     }
 
     small {
@@ -206,4 +215,8 @@
 
 .show-copy-confirmation .copy-confirmation {
     opacity: .7;
+}
+
+.card.risk-free .or {
+    top: auto;
 }

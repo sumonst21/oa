@@ -46,10 +46,9 @@
 	
 		<section class="card-section alt">		
 			<transition>
-				<div v-if="rfbMaxProfit || rfbHedged" class="card-wrap">
-					<CardRiskFree :play="rfbMaxProfit" />
-						<!-- <div>or</div> -->
-					<!-- <CardRiskFree :play="rfbHedged" /> -->
+				<div v-if="rfbSafe && rfbRisky" class="card-wrap">
+					<CardRiskFree :play="rfbRisky"/>
+					<CardRiskFree :play="rfbSafe"/>
 				</div>
 			</transition>
 		</section>
@@ -59,7 +58,6 @@
 <script>
 import CardRiskFree from '@/components/CardRiskFree';
 import Nav from '@/components/Nav';
-import _ from 'lodash';
 import helpers from '@/components/mixins/helpers';
 
 export default {
@@ -73,9 +71,9 @@ export default {
 		return {
 			isFocusingInput: false,
 			viewingBookmark: false,
-			stakeA: '',
-			oddsA: '',
-			oddsB: '',
+			stakeA: 500,
+			oddsA: -350,
+			oddsB: -325,
 			loading: false,
 			freshInput: true,
 			hasSearched: false,
@@ -83,83 +81,62 @@ export default {
 			labelB: 'Book B',
 			isEditingLabelA: false,
 			isEditingLabelB: false,
-			rfbMaxProfit: false,
-			rfbHedged: false,
-			conversionPercent: 75,
+			rfbSafe: false,
+			rfbRisky: false,
+			conversionRate: 75,
 		};
 	},
 	computed: {
 	},
 	methods: {
 		calculateRiskFree() {
-			const stakeB = this.stakeA * (this.oddsA / 100);
+			this.calculateRisky();
+			this.calculateSafe();
+		},
+		calculateRisky() {
+			const conversion = Number(this.stakeA * (this.conversionRate / 100));
+			const payoutA = this.getPayout(this.oddsA, this.stakeA);
+			const stakeB = payoutA - this.stakeA;
 			const payoutB = Number(this.getPayout(this.oddsB, stakeB));
+			const profitB = payoutB - stakeB - this.stakeA;
 			
-			this.rfbMaxProfit = {
+			this.rfbRisky = {
+				safe: false,
 				stakeA: this.stakeA,
 				oddsA: this.oddsA,
-				payoutA: Number(this.stakeA) + stakeB,
+				payoutA,
 				profitA: 0,
 				stakeB,
 				oddsB: this.oddsB,
 				payoutB,
-				profitB: payoutB - stakeB - this.stakeA,
+				profitB: Number(profitB.toFixed(2)),
+				conversion,
+				profitAfterConversion: Number((profitB + conversion).toFixed(2)),
+				conversionRate: this.conversionRate,
 			}
 		},
-		calculateArb() {
-			// Don't search again if we haven't changed any inputs
-			if ( !this.freshInput ) return;
+		calculateSafe() {
+			const conversion = Number(this.stakeA * (this.conversionRate / 100));
+			const payoutA = this.getPayout(Number(this.oddsA), Number(this.stakeA));
+			const o = ( this.oddsB * -1 ) / 100;
+			let stakeB = (payoutA - conversion) / (1 + (1/o) );
+			stakeB = Math.round(stakeB);
+			const payoutB = Number(this.getPayout(this.oddsB, stakeB));
+			const profitB = Number(payoutB - this.stakeA - stakeB);
 
-			// Reset stuff
-			this.plays = [];
-			this.loading = true;
-			this.freshInput = false;
-			this.oddsAx = this.oddsA;
-			this.oddsBx = this.oddsB;
-
-			if ( this.stakeA ) {
-
-				// Start at max stake and decrement
-				for (var xa = Number(this.stakeA); xa > 0; xa -= 0.5 ) {
-					var payoutA = Number(this.getPayout(this.oddsA, xa));
-
-					// For this stake on book A, try stakes on book B starting at 0 and incrementing
-					for (var xb = 0; xb < 1000; xb += 0.5 ) {
-						var payoutB = Number(this.getPayout(this.oddsB, xb));
-						var sunk = xa + xb;
-
-						// Exit loop.. no longer profitable or above maxB bet
-						if ( sunk > payoutA || (this.maxB && xb > this.maxB) ) {
-							break;
-						}
-
-						// If arb opportunity exists
-						if ( payoutB >= sunk && payoutA >= sunk ) {
-							var profitA = Number((payoutA - sunk).toFixed(2));
-							var profitB = Number((payoutB - sunk).toFixed(2));
-
-							this.plays.push({
-								stakeA: xa,
-								payoutA: payoutA,
-								profitA: profitA,
-								stakeB: xb,
-								payoutB: payoutB,
-								profitB: profitB,
-								ev: ( (payoutA - sunk) + (payoutB - sunk) ) / 2,
-								proximity: Math.abs( profitA - profitB )
-							});
-						}
-					}
-				}
-			}
-
-			this.loading = false;
-			this.hasSearched = true;
-
-			if ( _.find(this.bookmarks.arb, { 'id': `${this.oddsA}${this.oddsB}` }) ) {
-				this.viewingBookmark = true;
-			} else {
-				this.viewingBookmark = false;
+			this.rfbSafe = {
+				safe: true,
+				stakeA: this.stakeA,
+				oddsA: this.oddsA,
+				payoutA,
+				profitA: payoutA - this.stakeA - stakeB,
+				stakeB,
+				oddsB: this.oddsB,
+				payoutB,
+				profitB,
+				conversion,
+				profitAfterConversion: Number((profitB + conversion).toFixed(2)),
+				conversionRate: this.conversionRate,
 			}
 		},
 		editLabel(l) {

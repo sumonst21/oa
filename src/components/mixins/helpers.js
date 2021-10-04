@@ -9,6 +9,17 @@ const helpers = {
             return `'',${date},${this.$parent.labelA},${this.$parent.oddsAx},${this.play.stakeA},,${this.$parent.labelB},${this.$parent.oddsBx},${this.play.stakeB}`;
         },
     },
+    filters: {
+      currency(amount) {
+        const num = Number(amount).toFixed(2);
+        
+        if ( num < 0 ) {
+            return `-$${num * -1}`.toLocaleString('en-US');
+        }
+        
+        return `$${Number(amount).toLocaleString('en-US')}`;
+      }
+    },
     methods: {
         onKeyUp() {
             this.freshInput = true;
@@ -29,16 +40,18 @@ const helpers = {
         },
         percentOf(orig, final) {
           const percent = (final / orig) * 100;
-          return percent.toFixed(2);
+          return Number(percent.toFixed(2));
         },
         getPayout(odds, stake) {
             var payout = 0;
+            odds = Number(odds);
+            stake = Number(stake);
 
             payout = odds > 0
             ? (stake * (odds / 100) ) + stake
             : (stake / ((odds * -1) / 100 ) ) + stake;
             
-            return Number(payout).toFixed(2);
+            return Number(Number(payout).toFixed(2));
         },
         getDelta(one, two) {
             one = Number(one);
