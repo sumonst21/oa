@@ -12,7 +12,7 @@
 		</div>
 	
 		<form @submit.prevent="calculate">
-			<div class="settings">
+			<!-- <div class="settings">
 				<div>
 					<label for="" style="display:block;">Rounding</label>
 					<div class="toggle toggle-round">
@@ -21,7 +21,7 @@
 						<div class="knob"></div>
 					</div>
 				</div>
-			</div>
+			</div> -->
 			<div class="book">
 				<input v-show="isEditingLabelA" type="text" v-model="labelA" class="label-input" ref="labelInputA" @blur="isEditingLabelA = false">
 				<h2 v-show="!isEditingLabelA" @click="editLabel('A')">{{ labelA }}</h2>
@@ -109,6 +109,7 @@ export default {
 	},
 	created() {
 		this.bindShortcuts();
+		this.calcFromUrl();
 	},
 	computed: {
 		lowProximity() {
@@ -164,9 +165,6 @@ export default {
 					this.bookmarkPlay();
 				}
 			});
-		},
-		calculateMinLoss() {
-			
 		},
 		calculate() {
 			// Don't search again if we haven't changed any inputs
@@ -236,6 +234,18 @@ export default {
 			} else {
 				this.viewingBookmark = false;
 			}
+		},
+		calcFromUrl() {
+			const a = this.getQueryString('oddsa');
+			const ax = this.getQueryString('stakea');
+			const b = this.getQueryString('oddsb');
+			
+			console.log('calc from url', a, ax, b);
+			this.oddsA = a;
+			this.stakeA = ax;
+			this.oddsB = b;
+
+			this.calculate();
 		},
 		editLabel(l) {
 			const prop = `isEditingLabel${l}`;

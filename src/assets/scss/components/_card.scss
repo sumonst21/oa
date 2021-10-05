@@ -178,14 +178,22 @@
     transition: 0;
     opacity: 0;
 
-    &:hover {
-        color: $teal;
-    }
-
     svg {
         width: 15px;
         color: inherit;
     }
+}
+
+.arb .copy-to-clipboard:hover {
+    color: $color-arb;
+}
+
+.free-bet .copy-to-clipboard:hover {
+    color: $color-fb;
+}
+
+.risk-free .copy-to-clipboard:hover {
+    color: $color-rfb;
 }
 
 .card:hover .copy-to-clipboard {

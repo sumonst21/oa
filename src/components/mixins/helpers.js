@@ -82,7 +82,14 @@ const helpers = {
                 document.querySelector('body').classList.remove('show-copy-confirmation');
             }, 700)
         },
-    }
+        getQueryString(field) {
+            const href = window.location.href;
+            const reg = new RegExp("[?&]" + field + "=([^&#]*)", "i");
+            const string = reg.exec(href);
+        
+            return string ? string[1] : null;
+        },
+    },
 };
 
 export default helpers;
