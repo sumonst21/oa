@@ -22,7 +22,7 @@ const helpers = {
         const num = Number(amount).toFixed(2);
         
         if ( num < 0 ) {
-            return `-$${num * -1}`.toLocaleString('en-US');
+            return `-$${Number(num * -1).toLocaleString('en-US')}`;
         }
         
         return `$${Number(num).toLocaleString('en-US')}`;

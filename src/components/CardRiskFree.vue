@@ -22,7 +22,7 @@
 			</div>
 			<div class="flex-center mt-15 mb-25">
 				<div class="amount">
-					<div class="number sunk color-orange">{{ play.stakeB|currency }}</div>
+					<div class="number sunk color-orange">{{ Number(play.stakeA) + Number(play.stakeB)|currency }}</div>
 					<small>sunk</small>
 				</div>
 			</div>
