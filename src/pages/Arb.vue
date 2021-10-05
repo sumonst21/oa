@@ -1,6 +1,5 @@
 <template>
 	<div>
-		<Nav/>
 		<div class="copy-confirmation">copied to clipboard</div>
 		<div v-if="bookmarks.length" class="bookmarks">
 			<div v-for="(play, i) in bookmarks.arb" class="bookmark flex-stretch" :key="i" @click="loadBookmark(play)">
@@ -12,13 +11,23 @@
 			</div>
 		</div>
 	
-		<form @submit.prevent="calculateArb">
+		<form @submit.prevent="calculate">
+			<div class="settings">
+				<div>
+					<label for="" style="display:block;">Rounding</label>
+					<div class="toggle toggle-round">
+						<input id="round" v-model="round" type="checkbox" value="true">
+						<label for="round"></label>
+						<div class="knob"></div>
+					</div>
+				</div>
+			</div>
 			<div class="book">
 				<input v-show="isEditingLabelA" type="text" v-model="labelA" class="label-input" ref="labelInputA" @blur="isEditingLabelA = false">
 				<h2 v-show="!isEditingLabelA" @click="editLabel('A')">{{ labelA }}</h2>
 				<div class="field-wrap flex-center">
 					<div class="field">
-						<label for="">Stake</label>
+						<label for="" class="color-arb">Max stake</label>
 						<input type="text" v-model="stakeA" value="25" @keyup="onKeyUp" required>
 					</div>
 					<div class="field">
@@ -39,7 +48,7 @@
 			</div>
 			<div class="flex-center button-wrap">
 				<div>
-					<button class="btn" type="submit" name="button">Calculate hedge</button>
+					<button class="btn btn-calculate" type="submit" name="button">Calculate hedge</button>
 					<button v-if="plays.length && !loading" :class="{ 'viewing-bookmark': viewingBookmark }" class="save-play btn-util" @click.prevent="bookmarkPlay"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" fill="currentColor"><path d="M0 512V48C0 21.49 21.49 0 48 0h288c26.51 0 48 21.49 48 48v464L192 400 0 512z"/></svg></button>
 				</div>
 			</div>
@@ -66,7 +75,6 @@
 import CardUnderdog from '@/components/CardUnderdog';
 import CardFavorite from '@/components/CardFavorite';
 import CardBalanced from '@/components/CardBalanced';
-import Nav from '@/components/Nav';
 import _ from 'lodash';
 import helpers from '@/components/mixins/helpers';
 
@@ -77,7 +85,6 @@ export default {
 		CardUnderdog,
 		CardBalanced,
 		CardFavorite,
-		Nav,
 	},
 	data() {
 		return {
@@ -96,6 +103,8 @@ export default {
 			isEditingLabelA: false,
 			isEditingLabelB: false,
 			bookmarks: [],
+			noLossA: false,
+			noLossB: false,
 		};
 	},
 	created() {
@@ -156,9 +165,18 @@ export default {
 				}
 			});
 		},
-		calculateArb() {
+		calculateMinLoss() {
+			
+		},
+		calculate() {
 			// Don't search again if we haven't changed any inputs
 			if ( !this.freshInput ) return;
+			if ( !this.oddsA || !this.stakeA || !this.oddsB ) return;
+			
+			// Min loss
+			if ( Number(this.oddsA) + Number(this.oddsB) < 0 ) {
+				this.calculateMinLoss();
+			}
 			
 			// Bookmarks
 			if ( _.find(this.bookmarks, { 'id': `${this.oddsA}${this.oddsB}` }) ) {

@@ -149,3 +149,23 @@
 .color-blue {
 	color: $blue !important;
 }
+
+.color-arb {
+	color: darken($color-arb, 5%);
+}
+
+.color-fb {
+	color: darken($color-fb, 5%);
+}
+
+.color-rfb {
+	color: darken($color-rfb, 5%);
+}
+
+.bg-fb {
+	background: $color-fb;
+}
+
+.bg-rfb {
+	background: $color-rfb;
+}

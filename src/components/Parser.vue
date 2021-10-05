@@ -33,7 +33,7 @@
                 </select>
             </div> -->
             <div class="flex align-right">
-                <button class="btn btn-teal" :disabled="!rawDataDK || !rawDataFD" @click.prevent="parse">Parse</button>
+                <button class="btn btn-calculate" :disabled="!rawDataDK || !rawDataFD" @click.prevent="parse">Parse</button>
             </div>
         </div>
     </div>

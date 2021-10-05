@@ -1,21 +1,27 @@
 <template>
 	<div>
 		<div class="copy-confirmation">copied to clipboard</div>
-		<Nav/>
-		<form @submit.prevent="calculateRiskFree">
-			<!-- <div class="toggle-mode toggle">
-				<div :class="{ 'enabled': !freeBetMode }" class="text left">Arb</div>
-				<input id="mode" v-model="freeBetMode" type="checkbox" value="true">
-				<label for="mode"></label>
-				<div class="knob"></div>
-				<div :class="{ 'enabled': freeBetMode }" class="text right">Free Bet</div>
-			</div> -->
+		<form @submit.prevent="calculate">
+			<div class="settings">
+				<div>
+					<label for="" style="display:block;">Rounding</label>
+					<div class="toggle toggle-round">
+						<input id="round" v-model="round" type="checkbox" value="true">
+						<label for="round"></label>
+						<div class="knob"></div>
+					</div>
+				</div>
+				<div class="field mt-5">
+					<label for="">Conversion %</label>
+					<input type="text" v-model="conversionRate" @keyup="onKeyUp">
+				</div>
+			</div>
 			<div class="book">
 				<input v-show="isEditingLabelA" type="text" v-model="labelA" class="label-input" ref="labelInputA" @blur="isEditingLabelA = false">
 				<h2 v-show="!isEditingLabelA" @click="editLabel('A')">{{ labelA }}</h2>
 				<div class="field-wrap flex-center">
 					<div class="field">
-						<label for="">Stake</label>
+						<label for="" class="color-rfb">Risk-free stake</label>
 						<input type="text" v-model="stakeA" value="25" @keyup="onKeyUp" required>
 					</div>
 					<div class="field">
@@ -35,7 +41,7 @@
 				</div>
 			</div>
 			<div class="flex-center button-wrap">
-				<button class="btn" type="submit" name="button">Calculate hedge</button>
+				<button class="btn btn-calculate" type="submit" name="button">Calculate hedge</button>
 			</div>
 		</form>
 	
@@ -57,7 +63,6 @@
 
 <script>
 import CardRiskFree from '@/components/CardRiskFree';
-import Nav from '@/components/Nav';
 import helpers from '@/components/mixins/helpers';
 
 export default {
@@ -65,15 +70,14 @@ export default {
 	mixins: [helpers],
 	components: {
 		CardRiskFree,
-		Nav,
 	},
 	data() {
 		return {
 			isFocusingInput: false,
 			viewingBookmark: false,
-			stakeA: 500,
-			oddsA: -350,
-			oddsB: -325,
+			stakeA: '',
+			oddsA: '',
+			oddsB: '',
 			loading: false,
 			freshInput: true,
 			hasSearched: false,
@@ -89,7 +93,8 @@ export default {
 	computed: {
 	},
 	methods: {
-		calculateRiskFree() {
+		calculate() {
+			if ( !this.oddsA || !this.stakeA || !this.oddsB ) return;
 			this.calculateRisky();
 			this.calculateSafe();
 		},
@@ -119,8 +124,11 @@ export default {
 			const conversion = Number(this.stakeA * (this.conversionRate / 100));
 			const payoutA = this.getPayout(Number(this.oddsA), Number(this.stakeA));
 			const o = ( this.oddsB * -1 ) / 100;
-			let stakeB = (payoutA - conversion) / (1 + (1/o) );
-			stakeB = Math.round(stakeB);
+			let stakeB = Number(((payoutA - conversion) / (1 + (1/o) )).toFixed(2));
+			
+			if ( this.round ) {
+				stakeB = Math.round(stakeB);	
+			}
 			const payoutB = Number(this.getPayout(this.oddsB, stakeB));
 			const profitB = Number(payoutB - this.stakeA - stakeB);
 
@@ -150,12 +158,9 @@ export default {
 		},
 	},
 	watch: {
-		freeBetMode() {
-			this.plays = []
-			this.viewingBookmark = false;
-			this.conversion = false;
-			this.hasSearched = false;  
-		},
+		round() {
+			this.calculate();
+		}
 	},
 }
 </script>

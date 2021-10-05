@@ -3,7 +3,7 @@
     align-items: center;
     justify-content: center;
     padding: 1rem 3rem;
-    border-radius: 40px;
+    // border-radius: 40px;
     border: 0;
     outline: 0;
     font-size: 14px;
@@ -30,4 +30,16 @@
     &[disabled]:hover {
         background: $teal;
     }
+}
+
+.arb .btn-calculate {
+    background: $color-arb;    
+}
+
+.free-bet .btn-calculate {
+    background: $color-fb;
+}
+
+.risk-free .btn-calculate {
+    background: $color-rfb;
 }

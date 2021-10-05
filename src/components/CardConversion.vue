@@ -8,30 +8,30 @@
 			<div class="flex split">
 				<div class="amount">
 					<label>{{ this.$parent.labelA }} ({{ this.play.oddsA }})</label>
-					<div class="number">${{ play.stakeA.toLocaleString('en-US') }}</div>
+					<div class="number">{{ play.stakeA|currency }}</div>
 					<small>free bet</small>
 				</div>
 				<div class="amount">
 					<label>{{ this.$parent.labelB }} ({{ this.play.oddsB }})</label>
-					<div class="number">${{ play.stakeB.toLocaleString('en-US') }}</div>
+					<div class="number">{{ play.stakeB|currency }}</div>
 					<small>stake</small>
 				</div>
 			</div>
 			<div class="flex-center mt-15 mb-25">
 				<div class="amount">
-					<div class="number sunk color-orange">${{ play.stakeB.toLocaleString('en-US') }}</div>
+					<div class="number sunk color-orange">{{ play.stakeB|currency }}</div>
 					<small>sunk</small>
 				</div>
 			</div>
 			<div class="flex split card-bottom">
 				<div class="amount">
-					<div class="number color-green">${{ play.profitA.toLocaleString('en-US') }}</div>
-					<small>${{ play.payoutA.toLocaleString('en-US') }} payout</small>
+					<div class="number color-green">{{ play.profitA|currency }}</div>
+					<small>{{ play.payoutA|currency }} payout</small>
 				</div>
 				<span class="or">or</span>
 				<div class="amount">
-					<div class="number color-green">${{ play.profitB.toLocaleString('en-US') }}</div>
-					<small>${{ play.payoutB.toLocaleString('en-US') }} payout</small>
+					<div class="number color-green">{{ play.profitB|currency }}</div>
+					<small>{{ play.payoutB|currency }} payout</small>
 				</div>
 			</div>
 		</div>

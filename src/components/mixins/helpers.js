@@ -8,6 +8,14 @@ const helpers = {
 
             return `'',${date},${this.$parent.labelA},${this.$parent.oddsAx},${this.play.stakeA},,${this.$parent.labelB},${this.$parent.oddsBx},${this.play.stakeB}`;
         },
+        round: {
+            get () {
+                return this.$store.state.round;
+            },
+            set (value) {
+                this.$store.state.round = value;
+            },
+        },
     },
     filters: {
       currency(amount) {
@@ -17,7 +25,7 @@ const helpers = {
             return `-$${num * -1}`.toLocaleString('en-US');
         }
         
-        return `$${Number(amount).toLocaleString('en-US')}`;
+        return `$${Number(num).toLocaleString('en-US')}`;
       }
     },
     methods: {

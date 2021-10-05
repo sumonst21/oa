@@ -6,7 +6,7 @@
 .card {
     background: #fff;
     box-shadow: rgba(0, 0, 0, .16) 0px 2px 8px 0px;
-    border-radius: 8px;
+    border-top: 3px solid $gray;
     text-align: center;
     max-width: 400px;
     margin: 0 auto 20px;
@@ -24,7 +24,6 @@
         font-size: 22px;
         padding: 1rem 2rem;
         margin-bottom: 20px;
-        border-radius: 10px 10px 0 0;
     }
 
     small {
@@ -50,7 +49,7 @@
         display: flex;
         justify-content: center;
         flex-wrap: wrap;
-        padding: 4.5em 0 2em;
+        padding: 2em 0 2em;
     }
 }
 
@@ -86,8 +85,8 @@
     }
 
     label {
-        display: block;
-        margin-bottom: 20px;
+        display: inline-block;
+        margin-bottom: 12px;
         font-weight: bold;
         border-radius: 3px;
         font-size: 13px;
@@ -147,6 +146,7 @@
 .fade-leave-to, {
     transition: 0s;
 }
+
 
 // -----------------------------------------------------------------------------
 //! alt
@@ -219,4 +219,31 @@
 
 .card.risk-free .or {
     top: auto;
+}
+
+// -----------------------------------------------------------------------------
+//! Skins
+// -----------------------------------------------------------------------------
+
+.arb .card {
+    border-color: $color-arb;
+}
+
+.free-bet .card {
+    border-color: $color-fb;
+}
+
+.risk-free .card {
+    border-color: $color-rfb;
+}
+
+
+// -----------------------------------------------------------------------------
+//! Badges
+// -----------------------------------------------------------------------------
+
+.badge {
+    display: inline-block;
+    padding: 2px 4px;
+    color: #fff;
 }
