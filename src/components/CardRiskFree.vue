@@ -12,7 +12,7 @@
 				<div class="amount">
 					<label>{{ this.$parent.labelA }} ({{ this.play.oddsA }})</label>
 					<div class="number">{{ play.stakeA|currency }}</div>
-					<small class="badge badge-purple">risk-free</small>
+					<small>risk-free</small>
 				</div>
 				<div class="amount">
 					<label>{{ this.$parent.labelB }} ({{ this.play.oddsB }})</label>
