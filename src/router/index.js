@@ -7,7 +7,8 @@ const routes = [
   {
 	path: '/',
 	name: 'home',
-	component: () => import('../pages/Arb.vue')
+	component: () => import('../pages/Arb.vue'),
+	redirect: { name: 'arb' }
   },
   {
 	path: '/arb',
