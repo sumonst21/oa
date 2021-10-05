@@ -90,9 +90,22 @@ export default {
 			conversionRate: 75,
 		};
 	},
+	created() {
+		this.calcFromUrl();	
+	},
 	computed: {
 	},
 	methods: {
+		calcFromUrl() {
+			const a = this.getQueryString('oddsa');
+			const ax = this.getQueryString('stakea');
+			const b = this.getQueryString('oddsb');			
+			this.oddsA = a;
+			this.stakeA = ax;
+			this.oddsB = b;
+
+			this.calculate();
+		},
 		calculate() {
 			if ( !this.oddsA || !this.stakeA || !this.oddsB ) return;
 			this.calculateRisky();

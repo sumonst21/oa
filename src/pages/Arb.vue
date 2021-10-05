@@ -238,9 +238,7 @@ export default {
 		calcFromUrl() {
 			const a = this.getQueryString('oddsa');
 			const ax = this.getQueryString('stakea');
-			const b = this.getQueryString('oddsb');
-			
-			console.log('calc from url', a, ax, b);
+			const b = this.getQueryString('oddsb');			
 			this.oddsA = a;
 			this.stakeA = ax;
 			this.oddsB = b;

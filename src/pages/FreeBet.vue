@@ -103,10 +103,21 @@ export default {
 	},
 	created() {
 		this.bindShortcuts();
+		this.calcFromUrl();
 	},
 	computed: {
 	},
 	methods: {
+		calcFromUrl() {
+			const a = this.getQueryString('oddsa');
+			const ax = this.getQueryString('stakea');
+			const b = this.getQueryString('oddsb');			
+			this.oddsA = a;
+			this.stakeA = ax;
+			this.oddsB = b;
+
+			this.calculate();
+		},
 		bindShortcuts() {
 			document.addEventListener( 'keydown', (event) => {
 				if ( this.isEditingLabelA || this.isEditingLabelB ) {
