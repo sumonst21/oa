@@ -176,6 +176,7 @@ export default {
 	},
 	watch: {
 		round() {
+			this.freshInput = true;
 			this.calculate();
 		}
 	},

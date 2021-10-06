@@ -193,7 +193,6 @@ export default {
 				labelB: this.labelB,
 				oddsA: this.oddsA,
 				oddsB: this.oddsB,
-				delta: this.getDelta(this.oddsA, this.oddsB),
 				ev: this.balanced ? this.balanced.ev.toFixed(2) : 0,
 				percent: this.conversion ? this.conversion.percent : 0,
 				hedge: this.conversion ? this.conversion.stakeB : 0,

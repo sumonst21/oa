@@ -1,18 +1,18 @@
 <template>
 	<div>
 		<div class="copy-confirmation">copied to clipboard</div>
-		<div v-if="bookmarks.length" class="bookmarks">
-			<div v-for="(play, i) in bookmarks.arb" class="bookmark flex-stretch" :key="i" @click="loadBookmark(play)">
-				<div class="ev flex-center">${{ play.ev }}</div>
-				<div class="games">
-					{{ play.labelA }} <strong>{{ play.oddsA }}</strong><br>
-					{{ play.labelB }} <strong>{{ play.oddsB }}</strong>
-				</div>
-			</div>
-		</div>
 	
 		<form @submit.prevent="calculate">
-			<!-- <div class="settings">
+			<div v-if="bookmarks.length" class="bookmarks">
+				<div v-for="(play, i) in bookmarks" class="bookmark flex-stretch" :key="i" @click="loadBookmark(play)">
+					<div class="ev flex-center">{{ play.ev|currency }}</div>
+					<div class="games">
+						{{ play.labelA }} <strong>{{ play.oddsA }}</strong><br>
+						{{ play.labelB }} <strong>{{ play.oddsB }}</strong>
+					</div>
+				</div>
+			</div>
+			<div class="settings">
 				<div>
 					<label for="" style="display:block;">Rounding</label>
 					<div class="toggle toggle-round">
@@ -21,7 +21,7 @@
 						<div class="knob"></div>
 					</div>
 				</div>
-			</div> -->
+			</div>
 			<div class="book">
 				<input v-show="isEditingLabelA" type="text" v-model="labelA" class="label-input" ref="labelInputA" @blur="isEditingLabelA = false">
 				<h2 v-show="!isEditingLabelA" @click="editLabel('A')">{{ labelA }}</h2>
@@ -49,7 +49,7 @@
 			<div class="flex-center button-wrap">
 				<div>
 					<button class="btn btn-calculate" type="submit" name="button">Calculate hedge</button>
-					<button v-if="plays.length && !loading" :class="{ 'viewing-bookmark': viewingBookmark }" class="save-play btn-util" @click.prevent="bookmarkPlay"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" fill="currentColor"><path d="M0 512V48C0 21.49 21.49 0 48 0h288c26.51 0 48 21.49 48 48v464L192 400 0 512z"/></svg></button>
+					<button v-if="arbBalanced && !loading" :class="{ 'viewing-bookmark': viewingBookmark }" class="save-play btn-util" @click.prevent="bookmarkPlay"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" fill="currentColor"><path d="M0 512V48C0 21.49 21.49 0 48 0h288c26.51 0 48 21.49 48 48v464L192 400 0 512z"/></svg></button>
 				</div>
 			</div>
 		</form>
@@ -61,10 +61,10 @@
 	
 		<section class="card-section alt">
 			<transition name="fade">
-				<div v-if="plays.length && !loading" class="card-wrap">
-					<CardUnderdog :play="underdog" />
-					<CardBalanced :play="balanced" />
-					<CardFavorite :play="favorite" />
+				<div v-if="arbBalanced && !loading" class="card-wrap">
+					<CardUnderdog v-if="underdog" :play="underdog" />
+					<CardBalanced :play="arbBalanced" />
+					<CardFavorite v-if="favorite" :play="favorite" />
 				</div>
 			</transition>
 		</section>
@@ -95,6 +95,7 @@ export default {
 			oddsB: '',
 			maxB: '',
 			plays: [],
+			arbBalanced: false,
 			loading: false,
 			freshInput: true,
 			hasSearched: false,
@@ -171,65 +172,40 @@ export default {
 			if ( !this.freshInput ) return;
 			if ( !this.oddsA || !this.stakeA || !this.oddsB ) return;
 			
-			// Min loss
-			if ( Number(this.oddsA) + Number(this.oddsB) < 0 ) {
-				this.calculateMinLoss();
-			}
-			
-			// Bookmarks
-			if ( _.find(this.bookmarks, { 'id': `${this.oddsA}${this.oddsB}` }) ) {
-				this.viewingBookmark = true;
-			} else {
-				this.viewingBookmark = false;
-			}
-
 			// Reset stuff
-			this.plays = [];
 			this.loading = true;
 			this.freshInput = false;
-			this.oddsAx = this.oddsA;
-			this.oddsBx = this.oddsB;
-
-			if ( this.stakeA ) {
-
-				// Start at max stake and decrement
-				for (var xa = Number(this.stakeA); xa > 0; xa -= 0.5 ) {
-					var payoutA = Number(this.getPayout(this.oddsA, xa));
-
-					// For this stake on book A, try stakes on book B starting at 0 and incrementing
-					for (var xb = 0; xb < 1000; xb += 0.5 ) {
-						var payoutB = Number(this.getPayout(this.oddsB, xb));
-						var sunk = xa + xb;
-
-						// Exit loop.. no longer profitable or above maxB bet
-						if ( sunk > payoutA || (this.maxB && xb > this.maxB) ) {
-							break;
-						}
-
-						// If arb opportunity exists
-						if ( payoutB >= sunk && payoutA >= sunk ) {
-							var profitA = Number((payoutA - sunk).toFixed(2));
-							var profitB = Number((payoutB - sunk).toFixed(2));
-
-							this.plays.push({
-								stakeA: xa,
-								payoutA: payoutA,
-								profitA: profitA,
-								stakeB: xb,
-								payoutB: payoutB,
-								profitB: profitB,
-								ev: ( (payoutA - sunk) + (payoutB - sunk) ) / 2,
-								proximity: Math.abs( profitA - profitB )
-							});
-						}
-					}
-				}
+			
+			// Calculations
+			const payoutA = Number(this.getPayout(this.oddsA, this.stakeA));				
+			let stakeB = this.getStake(this.oddsB, payoutA);
+			if ( this.round ) {
+				stakeB = Math.round(stakeB);
 			}
-
+			const payoutB = Number(this.getPayout(this.oddsB, stakeB));
+			const sunk = Number(this.stakeA) + Number(stakeB);
+			const profitB = payoutB - sunk;
+			const profitA = payoutA - sunk;
+			
+			// Push our card data
+			this.arbBalanced = {
+				stakeA: Number(this.stakeA),
+				oddsA: this.oddsA,
+				oddsB: this.oddsB,
+				payoutA,
+				profitA,
+				stakeB,
+				payoutB,
+				profitB,
+				ev: (profitA + profitB) / 2,
+			}
+			
+			// Done loading
 			this.loading = false;
 			this.hasSearched = true;
-
-			if ( _.find(this.bookmarks.arb, { 'id': `${this.oddsA}${this.oddsB}` }) ) {
+			
+			// Are we viewing a bookmark?
+			if ( _.find(this.bookmarks, { 'id': `${this.oddsA}${this.oddsB}` }) ) {
 				this.viewingBookmark = true;
 			} else {
 				this.viewingBookmark = false;
@@ -262,6 +238,7 @@ export default {
 				return;
 			}
 			
+			// Remove?
 			if ( this.viewingBookmark ) {
 				_.remove(this.bookmarks, (obj) => {
 					return obj.id == `${this.oddsA}${this.oddsB}`;
@@ -270,26 +247,28 @@ export default {
 				this.viewingBookmark = false;
 				return;
 			}
-
-			const play = {
-				id: `${this.oddsA}${this.oddsB}`,
-				labelA: this.labelA,
-				labelB: this.labelB,
-				oddsA: this.oddsA,
-				oddsB: this.oddsB,
-				delta: this.getDelta(this.oddsA, this.oddsB),
-				ev: this.balanced ? this.balanced.ev.toFixed(2) : 0,
-				percent: this.conversion ? this.conversion.percent : 0,
-				hedge: this.conversion ? this.conversion.stakeB : 0,
-			};
-			this.bookmarks.push(play);
+			
+			// Create
+			const bookmark = _.clone(this.arbBalanced)
+			bookmark.id = `${this.oddsA}${this.oddsB}`
+			bookmark.labelA = this.labelA;
+			bookmark.labelB = this.labelB;
+			
+			this.bookmarks.push(bookmark);
 			this.viewingBookmark = true;
 		},
-		loadBookmark(play) {
-			this.oddsA = play.oddsA;
-			this.oddsB = play.oddsB;
-			this.labelA = play.labelA;
-			this.labelB = play.labelB;
+		loadBookmark(bookmark) {
+			this.oddsA = bookmark.oddsA;
+			this.stakeA = bookmark.stakeA;
+			this.oddsB = bookmark.oddsB;
+			this.labelA = bookmark.labelA;
+			this.labelB = bookmark.labelB;
+			this.freshInput = true;
+			this.calculate();
+		},
+	},
+	watch: {
+		round() {
 			this.freshInput = true;
 			this.calculate();
 		}

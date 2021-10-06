@@ -61,15 +61,17 @@ const helpers = {
             
             return Number(Number(payout).toFixed(2));
         },
-        getDelta(one, two) {
-            one = Number(one);
-            two = Number(two);
-
-            if ( one > 0 && two > 0) {
-                return Math.abs(one - two);
+        getStake(oddsB, payoutA) {
+            const odds = Number(oddsB);
+            const payout = Number(payoutA);
+            
+            if ( odds < 0 ) {
+                const o = ( odds * -1 ) / 100;
+                return Number(((payout) / (1 + (1/o) )).toFixed(2));
             }
-
-            return one + two;
+            
+            const o = odds / 100;
+            return payoutA / (1 + o);
         },
         copyToClipboard(inputID) {
             const copyText = document.getElementById(inputID);
