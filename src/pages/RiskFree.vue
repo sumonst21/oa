@@ -100,9 +100,13 @@ export default {
 			const a = this.getQueryString('oddsa');
 			const ax = this.getQueryString('stakea');
 			const b = this.getQueryString('oddsb');			
+			const cr = this.getQueryString('cr');			
 			this.oddsA = a;
 			this.stakeA = ax;
 			this.oddsB = b;
+			if ( cr ) {
+				this.conversionRate = cr;	
+			}
 
 			this.calculate();
 		},
