@@ -106,6 +106,10 @@
     }
 }
 
+.card.risk-free .or {
+    top: auto;
+}
+
 .no-results {
     text-align: center;
     padding: 3rem 1rem;
@@ -147,6 +151,10 @@
     transition: 0s;
 }
 
+.fade-enter, .fade-leave-to {
+      opacity: 0;
+  }
+
 
 // -----------------------------------------------------------------------------
 //! alt
@@ -163,20 +171,23 @@
 }
 
 // -----------------------------------------------------------------------------
-//! Copy to clipboard
+//! Utility buttons
 // -----------------------------------------------------------------------------
 
-.copy-to-clipboard {
+.card .util {
     position: absolute;
     top: 5px;
     right: 6px;
-    background: transparent;
-    border: 0;
-    padding: 8px;
-    cursor: pointer;
-    color: rgba($black, .7);
     transition: 0;
     opacity: 0;
+    
+    button {
+        background: transparent;    
+        border: 0;
+        padding: 8px;
+        cursor: pointer;
+        color: rgba($black, .7);
+    }
 
     svg {
         width: 15px;
@@ -184,23 +195,11 @@
     }
 }
 
-.arb .copy-to-clipboard:hover {
-    color: $color-arb;
-}
-
-.free-bet .copy-to-clipboard:hover {
-    color: $color-fb;
-}
-
-.risk-free .copy-to-clipboard:hover {
-    color: $color-rfb;
-}
-
-.card:hover .copy-to-clipboard {
+.card:hover .util {
     opacity: 1;
 }
 
-.copy-string {
+.copy-input {
     opacity: 0;
     pointer-events: none;
     position: absolute;
@@ -208,26 +207,34 @@
 
 .copy-confirmation {
     position: fixed;
-    background: rgba( $teal, .8);
-    padding: 5px 14px;
     color: #fff;
-    top: 40%;
-    border-radius: 16px;
-    left: 50%;
-    transform: translateX(-50%);
-    transition: opacity .2s;
-    opacity: 0;
+    right: 1rem;
+    bottom: 1rem;
+    padding: 10px 15px;
+    border-radius: 3px;
     pointer-events: none;
     z-index: 100;
+    margin-top: 10px;
+    opacity: 0;
+    
+    &.show {
+        transition: .2s;
+        margin-top: 0;
+        opacity: 1;
+    }
 }
 
-.show-copy-confirmation .copy-confirmation {
-    opacity: .7;
+.arb .copy-confirmation {
+    background: rgba($color-arb, .8);
 }
 
-.card.risk-free .or {
-    top: auto;
+.free-bet .copy-confirmation {
+    background: rgba($color-fb, .8);
 }
+.risk-free .copy-confirmation {
+    background: rgba($color-rfb, .8);
+}
+
 
 // -----------------------------------------------------------------------------
 //! Skins
@@ -235,23 +242,24 @@
 
 .arb .card {
     border-color: $color-arb;
+    
+    .copy-to-clipboard:hover {
+        color: $color-arb;
+    }
 }
 
 .free-bet .card {
     border-color: $color-fb;
+    
+    .copy-to-clipboard:hover {
+        color: $color-fb;
+    }
 }
 
 .risk-free .card {
     border-color: $color-rfb;
-}
-
-
-// -----------------------------------------------------------------------------
-//! Badges
-// -----------------------------------------------------------------------------
-
-.badge {
-    display: inline-block;
-    padding: 2px 4px;
-    color: #fff;
+    
+    .copy-to-clipboard:hover {
+        color: $color-rfb;
+    }
 }

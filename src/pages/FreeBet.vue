@@ -1,6 +1,8 @@
 <template>
 	<div>
-		<div class="copy-confirmation">copied to clipboard</div>
+		<input id="shareLink" class="copy-input" type="text" :value="shareLink">
+		<input id="csv" class="copy-input" type="text" :value="csv">
+
 		<form @submit.prevent="calculate">
 			<div v-if="bookmarks.length" class="bookmarks">
 				<div v-for="(play, i) in bookmarks" class="bookmark conversion flex-stretch" :key="i" @click="loadBookmark(play)">
@@ -24,11 +26,11 @@
 				<div class="field-wrap flex-center">
 					<div class="field">
 						<label for="" class="color-fb">Free bet</label>
-						<input type="text" v-model="stakeA" value="25" @keyup="onKeyUp" required>
+						<input type="text" v-model="stakeA" value="25" @keyup="onKeyUp('xa')" required>
 					</div>
 					<div class="field">
 						<label for="">Odds</label>
-						<input type="text" v-model="oddsA" value="100" required @keyup="onKeyUp">
+						<input type="text" v-model="oddsA" value="100" required @keyup="onKeyUp('oa')">
 					</div>
 				</div>
 			</div>
@@ -39,7 +41,7 @@
 				<div class="field-wrap flex-center">
 					<div class="field">
 						<label for="">Odds</label>
-						<input type="text" v-model="oddsB" value="375" required @keyup="onKeyUp">
+						<input type="text" v-model="oddsB" value="375" required @keyup="onKeyUp('ob')">
 					</div>
 				</div>
 			</div>
@@ -93,10 +95,6 @@ export default {
 			loading: false,
 			freshInput: true,
 			hasSearched: false,
-			labelA: 'Book A',
-			labelB: 'Book B',
-			isEditingLabelA: false,
-			isEditingLabelB: false,
 			bookmarks: [],
 			freeBetMode: false,
 		};
@@ -106,6 +104,14 @@ export default {
 		this.calcFromUrl();
 	},
 	computed: {
+		csv() {
+			const today = new Date();
+			const dateArray = today.toLocaleDateString('en-US').split('/');
+			dateArray.pop();
+			const date = dateArray.join('/');
+
+			return `'',${date},${this.labelA},${this.oddsA},${this.conversion.stakeA},${this.conversion.payoutA},${this.labelB},${this.oddsB},${this.conversion.stakeB},${this.conversion.payoutB},${this.conversion.profitA},${this.conversion.profitB}`;
+		},
 	},
 	methods: {
 		calcFromUrl() {
@@ -169,9 +175,6 @@ export default {
 			this.$nextTick(() => {
 				this.$refs[ref].focus();
 			})
-		},
-		onKeyUp() {
-			this.freshInput = true;
 		},
 		bookmarkPlay() {
 			if ( !this.hasSearched ) {

@@ -1,6 +1,7 @@
 <template>
 	<div>
-		<div class="copy-confirmation">copied to clipboard</div>
+		<input id="shareLink" class="copy-input" type="text" :value="shareLink">
+
 		<form @submit.prevent="calculate">
 			<div class="settings">
 				<div>
@@ -13,7 +14,7 @@
 				</div>
 				<div class="field mt-5">
 					<label for="">Conversion %</label>
-					<input type="text" v-model="conversionRate" @keyup="onKeyUp">
+					<input type="text" v-model="conversionRate" @keyup="onKeyUp('cr')">
 				</div>
 			</div>
 			<div class="book">
@@ -22,11 +23,11 @@
 				<div class="field-wrap flex-center">
 					<div class="field">
 						<label for="" class="color-rfb">Risk-free stake</label>
-						<input type="text" v-model="stakeA" value="25" @keyup="onKeyUp" required>
+						<input type="text" v-model="stakeA" value="25" @keyup="onKeyUp('xa')" required>
 					</div>
 					<div class="field">
 						<label for="">Odds</label>
-						<input type="text" v-model="oddsA" value="100" required @keyup="onKeyUp">
+						<input type="text" v-model="oddsA" value="100" required @keyup="onKeyUp('oa')">
 					</div>
 				</div>
 			</div>
@@ -36,7 +37,7 @@
 				<div class="field-wrap flex-center">
 					<div class="field">
 						<label for="">Odds</label>
-						<input type="text" v-model="oddsB" value="375" required @keyup="onKeyUp">
+						<input type="text" v-model="oddsB" value="375" required @keyup="onKeyUp('ob')">
 					</div>
 				</div>
 			</div>
@@ -81,10 +82,6 @@ export default {
 			loading: false,
 			freshInput: true,
 			hasSearched: false,
-			labelA: 'Book A',
-			labelB: 'Book B',
-			isEditingLabelA: false,
-			isEditingLabelB: false,
 			rfbSafe: false,
 			rfbRisky: false,
 			conversionRate: 75,

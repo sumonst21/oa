@@ -1,13 +1,18 @@
 const helpers = {
+    data() {
+      return {
+        stakeA: '',
+        oddsA: '',
+        oddsB: '',
+        conversionRate: '75',
+        labelA: 'Book A',
+        labelB: 'Book B',
+        isEditingLabelA: false,
+        isEditingLabelB: false,
+        copyConfirmation: '',
+      };
+    },
     computed: {
-        sheetString() {
-            const today = new Date();
-            const dateArray = today.toLocaleDateString('en-US').split('/');
-            dateArray.pop();
-            const date = dateArray.join('/');
-
-            return `'',${date},${this.$parent.labelA},${this.$parent.oddsAx},${this.play.stakeA},,${this.$parent.labelB},${this.$parent.oddsBx},${this.play.stakeB}`;
-        },
         round: {
             get () {
                 return this.$store.state.round;
@@ -15,6 +20,24 @@ const helpers = {
             set (value) {
                 this.$store.state.round = value;
             },
+        },
+        shareLink() {
+            const arr = [
+                `stakea=${this.stakeA}`,
+                `oddsa=${this.oddsA}`,
+                `oddsb=${this.oddsB}`,
+            ];
+              
+            if ( this.labelA !== 'Book A') {
+                arr.push(`booka=${encodeURIComponent(this.labelA)}`);
+            }
+              
+            if ( this.labelB !== 'Book B') {
+                arr.push(`booka=${encodeURIComponent(this.labelB)}`);
+            }
+            
+            const params = arr.join('&');
+            return `${window.location.href}?${params}`;
         },
     },
     filters: {
@@ -29,11 +52,58 @@ const helpers = {
       }
     },
     methods: {
-        onKeyUp() {
+        editLabel(l) {
+            const prop = `isEditingLabel${l}`;
+            const ref = `labelInput${l}`;
+            this[prop] = true;
+
+            this.$nextTick(() => {
+                this.$refs[ref].focus();
+            })
+        },
+        copyToClipboard(id) {
+          const copyText = document.getElementById(id);
+          copyText.select();
+          copyText.setSelectionRange(0, 99999);
+          document.execCommand('copy');
+          console.log('copy', id);
+          
+          if ( id === 'shareLink' ) {
+            console.log('share');
+            this.copyConfirmation = 'Copied share URL';
+            console.log(this.copyConfirmation);
+          }
+          
+          if ( id === 'csv' ) {
+            console.log('csv');
+            this.copyConfirmation = 'Copied excel CSV';
+          }
+
+          setTimeout(() => {
+              this.copyConfirmation = false;
+          }, 600);
+        },
+        onKeyUp(field) {
             this.freshInput = true;
-            this.stakeA = this.stakeA.replace(/[^\d]/, '');
-            this.oddsA = this.oddsA.replace(/[^+-\d]/, '');
-            this.oddsB = this.oddsB.replace(/[^+-\d]/, '');
+            console.log('on keyup', field);
+            
+            if ( field == 'oa' && this.oddsA ) {
+                console.log(this.oddsA);
+                this.oddsA = this.oddsA.replace(/[^+-\d]/, '');                
+            }
+            
+            if ( field == 'ob' && this.oddsB ) {
+                console.log(this.oddsB);
+                this.oddsB = this.oddsB.replace(/[^+-\d]/, '');
+            }
+            
+            if ( field == 'xa' && this.stakeA ) {
+                this.stakeA = this.stakeA.replace(/[^\d]/, '');
+            }
+            
+            if ( field == 'cr' && this.conversionRate ) {
+                this.conversionRate = this.conversionRate.replace(/[^\d]/, '');
+            }
         },
         getConversionColor(percent) {
             if ( percent < 60 ) {
@@ -72,17 +142,6 @@ const helpers = {
             
             const o = odds / 100;
             return payoutA / (1 + o);
-        },
-        copyToClipboard(inputID) {
-            const copyText = document.getElementById(inputID);
-            copyText.select();
-            copyText.setSelectionRange(0, 99999);
-            document.execCommand('copy');
-            document.querySelector('body').classList.add('show-copy-confirmation');
-
-            setTimeout(() => {
-                document.querySelector('body').classList.remove('show-copy-confirmation');
-            }, 700)
         },
         getQueryString(field) {
             const href = window.location.href;
