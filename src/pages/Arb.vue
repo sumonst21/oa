@@ -186,7 +186,7 @@ export default {
 			}
 			
 			if ( labelB ) {
-				this.labelA = decodeURIComponent(labelB);
+				this.labelB = decodeURIComponent(labelB);
 			}
 
 			this.calculate();
