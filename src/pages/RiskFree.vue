@@ -95,6 +95,8 @@ export default {
 	methods: {
 		calcFromUrl() {
 			const a = this.getQueryString('oddsa');
+			const labelA = this.getQueryString('booka');
+			const labelB = this.getQueryString('bookb');
 			const ax = this.getQueryString('stakea');
 			const b = this.getQueryString('oddsb');			
 			const cr = this.getQueryString('cr');			
@@ -103,6 +105,14 @@ export default {
 			this.oddsB = b;
 			if ( cr ) {
 				this.conversionRate = cr;	
+			}
+			
+			if ( labelA ) {
+				this.labelA = decodeURIComponent(labelA);
+			}
+			
+			if ( labelB ) {
+				this.labelA = decodeURIComponent(labelB);
 			}
 
 			this.calculate();

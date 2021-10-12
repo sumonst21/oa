@@ -33,7 +33,7 @@ const helpers = {
             }
               
             if ( this.labelB !== 'Book B') {
-                arr.push(`booka=${encodeURIComponent(this.labelB)}`);
+                arr.push(`bookb=${encodeURIComponent(this.labelB)}`);
             }
             
             const params = arr.join('&');

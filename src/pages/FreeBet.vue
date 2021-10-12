@@ -118,9 +118,19 @@ export default {
 			const a = this.getQueryString('oddsa');
 			const ax = this.getQueryString('stakea');
 			const b = this.getQueryString('oddsb');			
+			const labelA = this.getQueryString('booka');
+			const labelB = this.getQueryString('bookb');
 			this.oddsA = a;
 			this.stakeA = ax;
 			this.oddsB = b;
+			
+			if ( labelA ) {
+				this.labelA = decodeURIComponent(labelA);
+			}
+			
+			if ( labelB ) {
+				this.labelA = decodeURIComponent(labelB);
+			}
 
 			this.calculate();
 		},
