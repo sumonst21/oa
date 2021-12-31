@@ -213,7 +213,7 @@ export default {
 			bookmark.labelB = this.labelB;
 			
 			this.bookmarks.push(bookmark);
-			this.viewingBookmark = true;
+			this.resetState();
 		},
 		loadBookmark(bookmark) {
 			this.oddsA = bookmark.oddsA;

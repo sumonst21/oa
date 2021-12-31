@@ -212,6 +212,9 @@ export default {
 			};
 			this.bookmarks.push(play);
 			this.viewingBookmark = true;
+
+			// Reset fields
+			this.resetState();
 		},
 		loadBookmark(play) {
 			this.oddsA = play.oddsA;

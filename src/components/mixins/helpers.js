@@ -61,6 +61,15 @@ const helpers = {
                 this.$refs[ref].focus();
             })
         },
+        resetState() {
+            this.labelA = 'Book A';
+			this.labelB = 'Book B';
+			this.oddsA = '';
+			this.stakeA = '';
+			this.oddsB = '';
+			this.hasSearched = false;
+            this.arbBalanced = false;
+        },
         copyToClipboard(id) {
           const copyText = document.getElementById(id);
           copyText.select();
@@ -76,7 +85,7 @@ const helpers = {
           
           if ( id === 'csv' ) {
             console.log('csv');
-            this.copyConfirmation = 'Copied excel CSV';
+            this.copyConfirmation = 'Copied CSV';
           }
 
           setTimeout(() => {
