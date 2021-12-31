@@ -7,8 +7,7 @@ const helpers = {
         conversionRate: '75',
         labelA: 'Book A',
         labelB: 'Book B',
-        isEditingLabelA: false,
-        isEditingLabelB: false,
+        editingLabel: false,
         copyConfirmation: '',
       };
     },
@@ -52,15 +51,6 @@ const helpers = {
       }
     },
     methods: {
-        editLabel(l) {
-            const prop = `isEditingLabel${l}`;
-            const ref = `labelInput${l}`;
-            this[prop] = true;
-
-            this.$nextTick(() => {
-                this.$refs[ref].focus();
-            })
-        },
         resetState() {
             this.labelA = 'Book A';
 			this.labelB = 'Book B';

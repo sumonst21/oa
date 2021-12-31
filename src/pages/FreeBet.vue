@@ -21,35 +21,33 @@
 				</div>
 			</div>
 			<div class="book">
-				<input v-show="isEditingLabelA" type="text" v-model="labelA" class="label-input" ref="labelInputA" @blur="isEditingLabelA = false">
-				<h2 v-show="!isEditingLabelA" @click="editLabel('A')">{{ labelA }}</h2>
+				<input type="text" v-model="labelA" class="label-input" tabindex="1" @focus="editingLabel = true" @blur="editingLabel = false">
 				<div class="field-wrap flex-center">
 					<div class="field">
 						<label for="" class="color-fb">Free bet</label>
-						<input type="text" v-model="stakeA" value="25" @keyup="onKeyUp('xa')" required>
+						<input type="text" v-model="stakeA" value="25" tabindex="3" @keyup="onKeyUp('xa')" required>
 					</div>
 					<div class="field">
 						<label for="">Odds</label>
-						<input type="text" v-model="oddsA" value="100" required @keyup="onKeyUp('oa')">
+						<input type="text" v-model="oddsA" value="100" required tabindex="4" @keyup="onKeyUp('oa')">
 					</div>
 				</div>
 			</div>
 			
 			<div class="book">
-				<input v-show="isEditingLabelB" type="text" v-model="labelB" class="label-input" ref="labelInputB" @blur="isEditingLabelB = false">
-				<h2 v-show="!isEditingLabelB" @click="editLabel('B')">{{ labelB }}</h2>
+				<input type="text" v-model="labelB" class="label-input" tabindex="2" @focus="editingLabel = true" @blur="editingLabel = false">
 				<div class="field-wrap flex-center">
 					<div class="field">
 						<label for="">Odds</label>
-						<input type="text" v-model="oddsB" value="375" required @keyup="onKeyUp('ob')">
+						<input type="text" v-model="oddsB" value="375" required tabindex="5" @keyup="onKeyUp('ob')">
 					</div>
 				</div>
 			</div>
 			
 			<div class="flex-center button-wrap">
 				<div>
-					<button class="btn btn-calculate" type="submit" name="button">Calculate hedge</button>
-					<button v-if="conversion && !loading" :class="{ 'viewing-bookmark': viewingBookmark }" class="save-play" @click.prevent="bookmarkPlay"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" fill="currentColor"><path d="M0 512V48C0 21.49 21.49 0 48 0h288c26.51 0 48 21.49 48 48v464L192 400 0 512z"/></svg></button>
+					<button class="btn btn-calculate" type="submit" tabindex="6" name="button">Calculate hedge</button>
+					<button v-if="conversion && !loading" tabindex="-1" :class="{ 'viewing-bookmark': viewingBookmark }" class="save-play" @click.prevent="bookmarkPlay"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" fill="currentColor"><path d="M0 512V48C0 21.49 21.49 0 48 0h288c26.51 0 48 21.49 48 48v464L192 400 0 512z"/></svg></button>
 				</div>
 			</div>
 		</form>
@@ -85,7 +83,6 @@ export default {
 	},
 	data() {
 		return {
-			isFocusingInput: false,
 			viewingBookmark: false,
 			oddsA: '',
 			stakeA: '',
@@ -136,7 +133,7 @@ export default {
 		},
 		bindShortcuts() {
 			document.addEventListener( 'keydown', (event) => {
-				if ( this.isEditingLabelA || this.isEditingLabelB ) {
+				if ( this.editingLabel ) {
 					return;
 				}
 	

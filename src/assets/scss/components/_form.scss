@@ -57,11 +57,7 @@ form h2 {
 	margin-bottom: 10px;
 	padding: 5px 10px;
 	height: 43px;
-	cursor: text;
-	
-	&:hover {
-		background: rgba($gray, .3);
-	}
+	cursor: text;	
 }
 
 input[type=text].label-input {
@@ -70,21 +66,26 @@ input[type=text].label-input {
 	width: 100%;
 	margin: 0 0 10px;
 	padding: 5px 10px;
-	background: rgba($gray, .5);
 	text-align: center;
 	font-size: 1.5em;
 	color: #000;
 	border: 0;
 	font-family: Avenir, Helvetica, Arial, sans-serif;
 	font-weight: 700;
+	background: transparent;
 
 	@include min( 640px ) {
 		max-width: none;
 	}
 
+	&:hover {
+		background: rgba($gray, .3);
+	}
+
 	&:focus {
 		outline: 0;
 		border: 0;
+		background: rgba($gray, .5);
 	}
 }
 
