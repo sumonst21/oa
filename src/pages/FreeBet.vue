@@ -107,7 +107,7 @@ export default {
 			dateArray.pop();
 			const date = dateArray.join('/');
 
-			return `'',${date},${this.labelA},${this.oddsA},${this.conversion.stakeA},${this.conversion.payoutA},${this.labelB},${this.oddsB},${this.conversion.stakeB},${this.conversion.payoutB},${this.conversion.profitA},${this.conversion.profitB}`;
+			return `${date},${this.labelA},${this.oddsA},${this.conversion.stakeA},${this.conversion.payoutA},${this.labelB},${this.oddsB},${this.conversion.stakeB},${this.conversion.payoutB},${this.conversion.profitA},${this.conversion.profitB}`;
 		},
 	},
 	methods: {
