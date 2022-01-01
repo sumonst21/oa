@@ -27,12 +27,22 @@
                 </div>
             </div>
             <div class="flex split card-bottom">
-                <div class="amount">
+                <div v-if="play.winback" class="amount">
+					<div class="number color-red small">{{ play.profitA - play.winback|currency }}</div>
+					<small>{{ play.payoutA - play.winback|currency }} payout</small>
+					
+					<div class="number color-blue small mt-10">+{{ play.winback|currency }}</div>
+					<small>winback</small>
+					
+					<div class="number color-green mt-10">{{ play.profitA|currency }}</div>
+					<small>after winback</small>
+				</div>
+                <div v-else class="amount">
                     <div :class="{'color-green': play.profitA > 0, 'color-red': play.profitA < 0}" class="number">{{ play.profitA|currency }}</div>
                     <small>{{ play.payoutA|currency }} payout</small>
                 </div>
                 <span class="or">or</span>
-                <div class="amount">
+                <div :class="{'mt-a': play.winback }" class="amount">
                     <div :class="{'color-green': play.profitB > 0, 'color-red': play.profitB < 0}" class="number">{{ play.profitB|currency }}</div>
                     <small>{{ play.payoutB|currency }} payout</small>
                 </div>

@@ -22,17 +22,29 @@
 						<div class="knob"></div>
 					</div>
 				</div>
+				<div>
+					<label for="" style="display:block;">Winback</label>
+					<div class="toggle toggle-round">
+						<input id="winback" v-model="winback" type="checkbox" value="true" tabindex="-1">
+						<label for="winback"></label>
+						<div class="knob"></div>
+					</div>
+				</div>
 			</div>
 			<div class="book">
 				<input type="text" v-model="labelA" class="label-input" tabindex="1" @focus="editingLabel = true" @blur="editingLabel = false">
 				<div class="field-wrap flex-center">
 					<div class="field">
 						<label for="" class="color-arb">Max stake</label>
-						<input type="text" v-model="stakeA" value="25" required tabindex="3" @keyup="onKeyUp('xa')">
+						<input type="text" v-model="stakeA" required tabindex="3" @keyup="onKeyUp('xa')">
 					</div>
 					<div class="field">
 						<label for="">Odds</label>
-						<input type="text" v-model="oddsA" value="100" required tabindex="4" @keyup="onKeyUp('oa')">
+						<input type="text" v-model="oddsA" required tabindex="4" @keyup="onKeyUp('oa')">
+					</div>
+					<div v-if="winback" class="field">
+						<label for="">Winback</label>
+						<input type="text" v-model="winbackAmount" required tabindex="4" @keyup="onKeyUp('wb')">
 					</div>
 				</div>
 			</div>
@@ -128,8 +140,14 @@ export default {
 			this.loading = true;
 			this.freshInput = false;
 			console.log('calculate 2');
+			
 			// Calculations
-			const payoutA = Number(this.getPayout(this.oddsA, this.stakeA));				
+			let payoutA = Number(this.getPayout(this.oddsA, this.stakeA));
+
+			if ( this.winback ) {
+				payoutA += Number(this.winbackAmount);
+			}
+
 			let stakeB = this.getStake(this.oddsB, payoutA);
 			if ( this.round ) {
 				stakeB = Math.round(stakeB);
@@ -151,6 +169,7 @@ export default {
 				payoutB,
 				profitB,
 				ev: (profitA + profitB) / 2,
+				winback: this.winback ? this.winbackAmount : false
 			}
 			
 			console.log('calculate 4');
@@ -173,6 +192,7 @@ export default {
 			const b = this.getQueryString('oddsb');			
 			const labelA = this.getQueryString('booka');
 			const labelB = this.getQueryString('bookb');
+			const wb = this.getQueryString('wb');
 			this.oddsA = a;
 			this.stakeA = ax;
 			this.oddsB = b;
@@ -183,6 +203,11 @@ export default {
 			
 			if ( labelB ) {
 				this.labelB = decodeURIComponent(labelB);
+			}
+			
+			if ( wb ) {
+				this.winback = true;
+				this.winbackAmount = decodeURIComponent(wb);
 			}
 
 			this.calculate();

@@ -7,6 +7,8 @@ const helpers = {
         conversionRate: '75',
         labelA: 'Book A',
         labelB: 'Book B',
+        winback: false,
+		winbackAmount: '',
         editingLabel: false,
         copyConfirmation: '',
       };
@@ -33,6 +35,10 @@ const helpers = {
               
             if ( this.labelB !== 'Book B') {
                 arr.push(`bookb=${encodeURIComponent(this.labelB)}`);
+            }
+
+            if ( this.winback ) {
+                arr.push(`wb=${this.winbackAmount}`);
             }
             
             const params = arr.join('&');
@@ -98,6 +104,10 @@ const helpers = {
             
             if ( field == 'xa' && this.stakeA ) {
                 this.stakeA = this.stakeA.replace(/[^\d]/, '');
+            }
+            
+            if ( field == 'wb' && this.winbackAmount ) {
+                this.winbackAmount = this.winbackAmount.replace(/[^\d]/, '');
             }
             
             if ( field == 'cr' && this.conversionRate ) {
