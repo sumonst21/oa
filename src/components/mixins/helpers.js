@@ -41,8 +41,14 @@ const helpers = {
                 arr.push(`wb=${this.winbackAmount}`);
             }
             
+            if ( Number(this.conversionRate) !== 75 ) {
+                arr.push(`cr=${this.conversionRate}`);
+            }
+            
             const params = arr.join('&');
-            return `${window.location.href}?${params}`;
+            const path = window.location.href.split('?');
+
+            return `${path[0]}?${params}`;
         },
     },
     filters: {
