@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="page">
 		<input id="shareLink" class="copy-input" type="text" :value="shareLink">
 
 		<form @submit.prevent="calculate">

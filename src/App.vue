@@ -5,6 +5,7 @@
             <Navigation/>
         </header>
         <router-view />
+        <div class="footer flex-right"><a href="https://twitter.com/ssorc" target="_blank">feedback</a></div>
     </div>
 </template>
 

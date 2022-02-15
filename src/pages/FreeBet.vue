@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="page">
 		<input id="shareLink" class="copy-input" type="text" :value="shareLink">
 		<input id="csv" class="copy-input" type="text" :value="csv">
 
