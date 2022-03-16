@@ -265,6 +265,11 @@ input[type=text].label-input {
 		text-align: center;
 		font-family: Avenir, Helvetica, Arial, sans-serif;
 	}
+
+	label svg {
+		position: relative;
+		top: 1px;
+	}
 }
 
 @include max(950px) {
